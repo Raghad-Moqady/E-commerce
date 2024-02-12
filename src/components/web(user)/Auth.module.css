@@ -1,0 +1,24 @@
+ .formDesign{
+     background: linear-gradient(rgb(252, 161, 252),rgb(166, 157, 221));
+     width:35%;
+     height: fit-content;
+     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ }
+ .LinkForget,.logIn{
+     color: rgb(78, 50, 97);
+  }
+ .LinkForget:hover,.logIn:hover{
+   color: rgb(147, 98, 161);
+ }
+ .InputDesign{
+    margin: auto;
+ }
+ .ForgetPasswordLogin {
+  color:rgb(78, 50, 97);
+
+}
+ .ForgetPasswordLogin:hover{
+   color:rgb(147, 98, 161); ;
+ }
+
+ 

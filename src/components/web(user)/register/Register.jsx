@@ -1,10 +1,11 @@
 import React from 'react'
-import Input from '../pages/Input'
+import Input from '../../pages/Input'
 import { useFormik } from 'formik'
-import { validationSchema } from './validation/validate'
+import { validationSchema } from '../validation/validate'
 import axios from 'axios'
 import {toast} from 'react-toastify';
-import '../web(user)/Register.css'
+import style from '../Auth.module.css'
+import { Link } from 'react-router-dom'
 
 export default function Register() {
   
@@ -18,16 +19,15 @@ export default function Register() {
          image:'',
   } //هدول القيم همي نفسهم اللي رح نوخدهم من اليوزر ونبعتهم بعدين للباك اند 
 
-  const onSubmit= values=>{//values ممكن تغييرها لاي اسم بدي اياه 
-    // console.log(values);
-
+  const onSubmit=async values=>{//values ممكن تغييرها لاي اسم بدي اياه 
+ 
     const formData = new FormData();
     formData.append("userName",values.userName);
     formData.append("email",values.email);
     formData.append("password",values.password);
     formData.append("image",values.image);
     
-    const {data}= axios.post(`https://ecommerce-node4.vercel.app/auth/signup`,formData);
+    const {data}= await axios.post(`https://ecommerce-node4.vercel.app/auth/signup`,formData);
     if(data.message=='success'){
      formik.resetForm();
      toast.success('account created successfully, please verify your email to login', {
@@ -48,8 +48,7 @@ export default function Register() {
       onSubmit,
       validationSchema
   });
-  // console.log(formik);
-// console.log('visited fields:',formik.touched);
+ 
   const inputs=[  
     {
       id:'User Name',//lable لربط الليبل مع الانبوت 
@@ -97,11 +96,19 @@ export default function Register() {
    )
   return (
     <>
-    <div className='container signUp p-3 mt-5 rounded-4 '>
+    <div className={`container ${style.formDesign} p-3 mt-5 rounded-0 `}>
     <h2 className='text-center mt-3 mb-4'>Create Account</h2>
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
-      {renderInputs}
-       <button className='rounded-2 border-0' type='submit' disabled={!formik.isValid}>Register</button> 
+      <div className="container">
+          {renderInputs}
+      <div className='w-75 m-auto d-flex justify-content-end '>
+        <Link className={` text-decoration-none ${style.logIn}`} to="/logIn">LogIn</Link>
+      </div>
+      <div className='d-flex justify-content-center mt-3'>
+         <button className='rounded-5 border-1 w-50 btn btn-outline-light  ' type='submit' disabled={!formik.isValid}>Register</button> 
+      </div>
+      </div>
+    
     </form>
     </div>
     </>
