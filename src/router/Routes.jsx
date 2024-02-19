@@ -18,7 +18,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from '../components/web(user)/protectedRoute/ProtectedRoute.jsx';
 import Loading from '../components/web(user)/Loading.jsx';
 import Auth from '../components/web(user)/authRouts/Auth.jsx';
-
+import Information from '../components/web(user)/profile/Information.jsx';
+import Contact from '../components/web(user)/profile/Contact.jsx';
+import AccountDetails from '../components/web(user)/profile/AccountDetails.jsx';
+import OrdersDetails from '../components/web(user)/orders/OrdersDetails.jsx';
+ import CreateOrder from '../components/web(user)/orders/CreateOrder.jsx';
  
 
 export const router = createBrowserRouter([
@@ -78,7 +82,32 @@ export const router = createBrowserRouter([
         element:
         <ProtectedRoute>
            <Profile/>
-        </ProtectedRoute>
+        </ProtectedRoute>,
+        children:[
+          {
+            index:true,
+            element:<Information/>
+          },
+          {
+            path:'contact',
+            element:<Contact/>
+          },
+          {
+            path:'accountDetails',
+            element:<AccountDetails/>
+          },
+          {
+            path:'orders',
+            element:<OrdersDetails/>
+          },
+        ]
+      },
+      {
+        path:'createOrder',
+        element:
+        <ProtectedRoute> 
+          <CreateOrder/>
+        </ProtectedRoute> 
       },
       {
         path :'*',

@@ -4,7 +4,7 @@ import { useFormik } from 'formik'
 import Input from '../../pages/Input.jsx';
 import { forgetPasswordSchema } from '../validation/validate';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function ForgetPassword() {
@@ -13,6 +13,7 @@ export default function ForgetPassword() {
         password:'',
         code:''
     }
+    const navigate=useNavigate();
     const onSubmit= async values=>{
          const {data}=await axios.patch(`${import.meta.env.VITE_API_URL}/auth/forgotPassword`,values);
      
@@ -28,6 +29,7 @@ export default function ForgetPassword() {
                 progress: undefined,
                 theme: "light",
                 });
+             navigate('/login') ;  
          }
     }
     const formik =useFormik({

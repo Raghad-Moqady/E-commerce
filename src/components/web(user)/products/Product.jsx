@@ -8,10 +8,11 @@ import { CartContext } from '../context/CartFeatures';
 export default function Product() {
   const token=localStorage.getItem('userToken');
   const navigate=useNavigate();
-  const {addToCartContext}=useContext(CartContext);
+  const {addToCartContext ,setCartDataLOading}=useContext(CartContext);
 
   const addToCart=async(productId)=>{
    const response=await addToCartContext(productId); 
+    setCartDataLOading(true);
     navigate('/cart') ;  
   }
    
@@ -49,7 +50,7 @@ export default function Product() {
                 <h4>Price: <label className='text-decoration-line-through text-danger'>{data.price}$</label> </h4>
                 <h4> Final Price: <label className='text-success' >{data.finalPrice}$</label> </h4>
                 <p>{data.description}</p>
-                <button className='btn btn-outline-success' onClick={()=>token?addToCart(data._id):navigate('/register')}  >Add To Catr</button>
+                <button className='btn btn-outline-success' onClick={()=>token?addToCart(data._id):navigate('/register')} >Add To Catr</button>
               </div>
             </div>
         </div>

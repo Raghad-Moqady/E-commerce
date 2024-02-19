@@ -6,7 +6,7 @@ import { UserContext } from '../context/UserContext.jsx';
 
 export default function Navbar() {
   const {productCount}=useContext(CartContext);
-  let {userToken,setUserToken,userData,setUserData}=useContext(UserContext);
+  let {userToken,setUserToken,userData,setUserData,loading}=useContext(UserContext);
   let navigate=useNavigate();
   
   const logout=()=>{  
@@ -15,7 +15,10 @@ export default function Navbar() {
     setUserData(null);
     navigate('/'); 
   } 
-  if(userData==null && userToken!=null){
+  // if(userData==null && userToken!=null){
+  //   return<Loading/>
+  // }
+  if(loading&& userToken!=null){
     return<Loading/>
   }
   return ( 
@@ -43,7 +46,7 @@ export default function Navbar() {
           <Link className="nav-link" to="/products">Products</Link>
         </li>
         {userToken? <li className="nav-item">
-          <Link className="nav-link" to="/cart">Cart <label className=' bg-success-subtle px-2'>{productCount}</label> </Link>
+          <Link className="nav-link" to="/cart">Cart <label className='bg-success-subtle px-2'>{productCount}</label> </Link>
         </li>:null}
         
         </ul>
@@ -69,7 +72,6 @@ export default function Navbar() {
           <li><Link className="dropdown-item" onClick={logout}>logout</Link></li>
           </>
           }
-        
         </ul>
       </li>
         </ul>

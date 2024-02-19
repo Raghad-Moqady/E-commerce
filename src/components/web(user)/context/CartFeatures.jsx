@@ -9,6 +9,8 @@ export const CartContext= createContext(null);// هاد المتغير اللي 
 export function CartContextProvider({children}){//childern==component
     const [productCount,setProductCount]=useState(0);
     const token =localStorage.getItem("userToken");
+    const [cartDataLoading,setCartDataLOading]=useState(true);
+    const [CartData,setCartData]=useState(null);
 //نريد التعامل مع الباك اند ==>post , productId(body)=>from product component, Authorization (HEADERS)=>'كلمة خاصة بتيجي من الباكإند'token
     const addToCartContext =async(productId)=>{
         try{
@@ -36,7 +38,7 @@ export function CartContextProvider({children}){//childern==component
         }
     }
     const getCartContextInfo=async()=>{//هاي الملعومات بدي اعرضهم بصفحة السلة عشان هيك بروح استدعي الفنكشن من صفحة الكارت 
-         try{
+         try{ 
             const {data}= await axios.get(`${import.meta.env.VITE_API_URL}/cart`,
             {
                 headers: 
@@ -44,12 +46,14 @@ export function CartContextProvider({children}){//childern==component
             }
             );
             setProductCount(data.count);
+            setCartDataLOading(false);
+            setCartData(data);
             return data;
          }catch(error){
             toast.error('Error');
          }
     }
-    
+
     const removeItemFromCartContext=async(productId)=>{
         try{
           const {data} =await axios.patch(`${import.meta.env.VITE_API_URL}/cart/removeItem`,
@@ -80,15 +84,14 @@ export function CartContextProvider({children}){//childern==component
         }
     
 
-    }
-
+    } 
    useEffect(()=>{//بتشتغل لما نعمل ريفريش للصفحة +بتشتغل لما ما نكون عاملين تسجيل دخول ونكتب كارت بالرابط ونسجل دخولنا بشكل غير مباشر
     if(token!=null){
         getCartContextInfo();
     }
    },[token])
    
-    return <CartContext.Provider value={{addToCartContext,getCartContextInfo,removeItemFromCartContext ,productCount}}>
+    return <CartContext.Provider value={{addToCartContext,getCartContextInfo,removeItemFromCartContext ,productCount,cartDataLoading,setCartDataLOading,token,CartData}}>
         {children}
     </CartContext.Provider>
 }

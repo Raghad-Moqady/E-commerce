@@ -1,7 +1,7 @@
 import React from 'react'
 import Input from '../../pages/Input'
 import { useFormik } from 'formik'
-import { validationSchema } from '../validation/validate'
+import { validationSchema } from '../validation/validate.js'
 import axios from 'axios'
 import {toast} from 'react-toastify';
 import style from '../Auth.module.css'

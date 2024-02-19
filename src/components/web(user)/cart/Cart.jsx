@@ -3,44 +3,112 @@ import './Cart.css'
 import { CartContext } from '../context/CartFeatures.jsx';
 import { useQuery } from 'react-query';
 import Loading from '../Loading.jsx' 
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
+  
     //عشان نعرض البيانات اللي جاي من الباك إند بهاي الصفحة هناك 3خطوات :
     //1. بده يصير ايفينت معين مثل onClick,useQuere,useEffect
     //2.عشان يستدعي فنكشن معين انا بنشؤه
     //3.هاد الفنكشن بده يستدعي الفنكشن الموجود بالكونتكست وبهيك بستخدم البيانات وبعرضها هون 
-    const {getCartContextInfo,removeItemFromCartContext} =useContext(CartContext);
-    
+    const {getCartContextInfo,removeItemFromCartContext,cartDataLoading,setCartDataLOading,token,productCount} =useContext(CartContext);
     const [data,setData]=useState({});
+    const [decLoading,setDecLoading]=useState(false);
+    const [incLoading,setIncLoading]=useState(false);
+ 
     let [total,setTotal]=useState(0);
     let updateTotal=(quantity,finalPrice)=>{
       total+=quantity * finalPrice;
     }
    
     const getCartInfo=async()=>{
-        const cartInfo= await getCartContextInfo();
-        
+        const cartInfo= await getCartContextInfo();  
         setData(cartInfo);
         return cartInfo;
     }
      const removeItem=async(productId)=>{
      const res = await removeItemFromCartContext(productId);
-     
+    }
+    const clearCart=async()=>{
+      try{
+        const {data}= await axios.patch(`${import.meta.env.VITE_API_URL}/cart/clear`,
+         {data:''},
+            {
+                headers: 
+               { Authorization :`Tariq__${token}`}
+            }
+            );  
+      if(data.message=='success'){ 
+        toast.success('Cart deleated Successfully', {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+
+      }
+      }catch(error){
+        toast.error('Error');
+      }
+      
+    }
+    const decrease=async(id)=>{ 
+      try{ 
+        setDecLoading(true);
+          const {data}=await axios.patch(`${import.meta.env.VITE_API_URL}/cart/decraseQuantity`,
+          {productId:id},
+          {
+          headers: 
+         { Authorization :`Tariq__${token}`}
+         } 
+         );
+         setDecLoading(false);
+        //  console.log(data);
+      }catch(error){
+        toast.error('Error');
+      }  
+    }
+
+    const increase =async(id)=>{
+      try{
+        setIncLoading(true);
+        const {data}=await axios.patch(`${import.meta.env.VITE_API_URL}/cart/incraseQuantity`,
+        {productId:id},
+        {
+        headers: 
+       { Authorization :`Tariq__${token}`}
+       } 
+   );
+   setIncLoading(false);
+  //  console.log(data);
+   
+    }catch(error){
+      toast.error('Error');
+    }
     }
     // const {data,isLoading} =useQuery("cartInfo",getCartInfo);
- 
-   
     // if(isLoading){
     //   return <Loading/>
     // }
     useEffect(()=>{
       getCartInfo();
     },[data])
+
+    if(cartDataLoading){
+      return <Loading/>
+    }
+    
   return (
     <div className="cart">
     <div className="container">
-      <div className="row">
-        <div className="cart-items">
+      <div className="row ">
+        <div className="cart-items ">
           <div className="products" id="products">
             <div className="item">
               <div className="product-info">
@@ -83,8 +151,10 @@ export default function Cart() {
                   </a>
                 </div>
               </div>
-              <div className="quantity">
-                <button>
+              <div className="quantity ">
+              {decLoading||incLoading?<Loading/>:
+                <>  
+                <button onClick={()=>decrease(product.details._id)}className='me-1'>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={16}
@@ -102,7 +172,7 @@ export default function Cart() {
                   </svg>
                 </button>
                 <span>{product.quantity} </span>
-                <button>
+                <button onClick={()=>increase(product.details._id)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={16}
@@ -118,50 +188,36 @@ export default function Cart() {
                     />
                   </svg>
                 </button>
+                </> 
+              } 
               </div>
               <div className="price">${product.details.finalPrice}</div>
               <div className="subtotal">${product.quantity*product.details.finalPrice}</div>
               {updateTotal(product.quantity,product.details.finalPrice)}
             </div>  
-            ):<h2>There are No Products In Your Cart Yet!</h2>}
-
+            ):<Loading/>} 
           </div>
-          <div className="cart-summary">
-            <h2>Cart summary</h2>
-            <div className="summery-items">
-              <div className="summary-item">
-                <div className="form-group">
-                  <input type="radio" /> <label>Free shipping</label>
-                </div>
-                <span>$0.00</span>
-              </div>
-              <div className="summary-item">
-                <div className="form-group">
-                  <input type="radio" /> <label>Express shipping</label>
-                </div>
-                <span>+$15.00</span>
-              </div>
-              <div className="summary-item">
-                <div className="form-group">
-                  <input type="radio" /> <label>Pick Up</label>
-                </div>
-                <span>%21.00</span>
-              </div>
-              <div className="summary-footer">
-                <label>Subtotal</label>
-                <span>$1234.00</span>
-              </div>
-              <div className="summary-footer">
-                <label className="total">Total</label>
+          <hr></hr>
+          {productCount?<div className='d-flex flex-column align-items-end  '>
+              <div className="summary-footer ">
+                <label className="total pe-4 ">Total :</label>
                 <span>${total}</span>
               </div>
-              <div className="checkout">
-                <a href="#">Chekout</a>
+              <div className="checkout mt-2 ">
+                <Link to='/createOrder'>Chekout</Link>
               </div>
-            </div>
-          </div>
+              <div className="clearCart mt-2 ">
+                <a  href="#" onClick={clearCart}>Clear Cart</a>
+              </div> 
+          </div>:
+           <div className="d-flex justify-content-center">
+            <p>The cart is empty</p>
+         </div>
+          }
+          
+        
         </div>
-        <div className="row">
+        {/* <div className="row">
           <h2>Have a coupon ?</h2>
           <p>Add your code for an instant cart discount</p>
           <div className="coupon-form">
@@ -180,7 +236,7 @@ export default function Cart() {
             <input type="text" placeholder="Coupon Code" />
             <button>Apply</button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   </div>
