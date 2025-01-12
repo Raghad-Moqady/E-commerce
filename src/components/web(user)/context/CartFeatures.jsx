@@ -45,6 +45,7 @@ export function CartContextProvider({children}){//childern==component
                { Authorization :`Tariq__${token}`}
             }
             );
+             
             setProductCount(data.count);
             setCartDataLOading(false);
             setCartData(data);

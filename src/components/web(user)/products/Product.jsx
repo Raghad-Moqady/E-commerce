@@ -6,7 +6,7 @@ import Loading from '../Loading';
 import { CartContext } from '../context/CartFeatures';
 
 export default function Product() {
-  const token=localStorage.getItem('userToken');
+  const token=localStorage.getItem('userToken');/*???? لي ما اجيبها من الكونتكست*/
   const navigate=useNavigate();
   const {addToCartContext ,setCartDataLOading}=useContext(CartContext);
 
@@ -19,6 +19,7 @@ export default function Product() {
   const changeImg=(subSrc)=>{
     mainImg.setAttribute("src",subSrc);
   }
+  
    const {productId}=useParams();
 
    const getProduct=async()=>{

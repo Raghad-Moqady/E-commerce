@@ -8,7 +8,8 @@ import style from '../Auth.module.css'
 import { Link } from 'react-router-dom'
 
 export default function Register() {
-  
+  //لما اعمل تغيير للصورة مابستدعي الطريقة العادية متل اي انبوت لان بهاي الحالة فقط رح يحط اسم الصورة مع الامتداد
+  //ولكن بستدعي هاد الفنكشن الخاص عشان يضيف بطريقته الخاصة وهي اسناد كل معلومات الصورة او الملف للانيشيال فاليو
   const handleFieldChange=(event)=>{
       formik.setFieldValue('image',event.target.files[0]);
   }
@@ -20,14 +21,17 @@ export default function Register() {
   } //هدول القيم همي نفسهم اللي رح نوخدهم من اليوزر ونبعتهم بعدين للباك اند 
 
   const onSubmit=async values=>{//values ممكن تغييرها لاي اسم بدي اياه 
- 
+ //استعملت طريقة الفورم داتا عشان الملفات ما بزبط نرفعها بالطريقة المباشرة والعادية للباكإند
+ //الباك والفرونت بستعملو الفورم داتا 
+ //عشان هيك انا هون بغلف البيانات باشي اسمه فورم داتا 
+ //فهو عبارة عن اوبجيكت فاضي
     const formData = new FormData();
     formData.append("userName",values.userName);
     formData.append("email",values.email);
     formData.append("password",values.password);
     formData.append("image",values.image);
     
-    const {data}= await axios.post(`https://ecommerce-node4.vercel.app/auth/signup`,formData);
+    const {data}= await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`,formData);
     if(data.message=='success'){
      formik.resetForm();
      toast.success('account created successfully, please verify your email to login', {
@@ -89,8 +93,11 @@ export default function Register() {
    title={input.title}
    value={input.value} 
    errors={formik.errors} 
-   onChange={input.onChange ||formik.handleChange}
-   onBlur={formik.handleBlur}//لتتبع الحقول التي تمت زيارتها 
+   onChange={input.onChange ||formik.handleChange}//هون في خيارين يا اما خيار الصورة او الانبوت العادي
+   //formik.handleChange>>
+   //  عشان اقدر اشوف الحروف اللي بكتبها بالانبوت على الشاشة 1)(from me )
+   //2 . (لما يصير في تغيير عالانبوت بروح بسندهم للانيشيال فاليو اللي دبعتهم عالباك (اول بأول
+   onBlur={formik.handleBlur}//لتتبع الحقول التي تمت زيارتها ..الزيارة=لمس الانبوت والضغط على اي مكان بالصفحة خارج الانبوت
    touched={formik.touched}//لتخزين الاماكن اللي قمنا بزيارتها ورح يتم اعتبارها ترو فقط لما اطلع من الانبوت 
    key={index} />
    )
@@ -98,6 +105,9 @@ export default function Register() {
     <>
     <div className={`container ${style.formDesign} p-3 mt-5 rounded-0 `}>
     <h2 className='text-center mt-3 mb-4'>Create Account</h2>
+    {/*encType="multipart/form-data">>>
+      بالعادة الفورم لما يبعت البيانات بشفرها بطريقة معينة لا تتناسب مع الملفات عشان هيك لازم نضيف هاي الجملة 
+    */}
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
       <div className="container">
           {renderInputs}

@@ -1,0 +1,38 @@
+ 
+.Home{
+background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),  url('../../img/img2.webp');
+background-repeat: no-repeat;
+background-size: cover;
+background-position:top;
+ background-attachment: fixed;
+height: 30rem; 
+
+}
+.title{ 
+  
+    width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right:1px solid #3333;
+    animation: typing 3s infinite alternate-reverse steps(27) , blink infinite 0.7s;
+  }
+  @keyframes typing{
+   from {
+     width: 0;
+   }
+   to{
+     width:490px;
+   }
+  }
+  @keyframes blink{
+   from{
+     border-color:#333333bd ;
+   }
+   to{
+     border-color: #33333300;
+   }
+  }
+  .header{
+    margin-top: 12rem;
+    margin-left: 7rem;
+  }

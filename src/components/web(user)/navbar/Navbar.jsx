@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CartContext } from '../context/CartFeatures';
-  import Loading from '../Loading.jsx'
+import Loading from '../Loading.jsx'
 import { UserContext } from '../context/UserContext.jsx';
 
 export default function Navbar() {
@@ -22,10 +22,13 @@ export default function Navbar() {
     return<Loading/>
   }
   return ( 
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary ">
       
       <div className="container">
-      <a className="navbar-brand" href="#" style={{paddingTop: 0}}>Raghad-shop</a>
+      <a className="navbar-brand" href="#" style={{paddingTop: 0}}>
+        <p>Raghad Shop</p>
+     {/* <img src='C:\Users\HP\Desktop\fullStack\FrontEnd\React\all\ecommerce\src\components\img/logo.png'></img>*/}
+      </a>
       
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon" />

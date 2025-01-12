@@ -11,7 +11,8 @@ import { CreateorderSchema } from '../validation/validate.js';
 
 export default function CreateOrder() {
  
-const {CartData,cartDataLoading}=useContext(CartContext);
+const {CartData,cartDataLoading,productCount}=useContext(CartContext);
+
 const token =localStorage.getItem("userToken");
 const navigate=useNavigate();
 const initialValues ={
@@ -97,13 +98,15 @@ if(cartDataLoading ){
   return (
     <div className='container'>
       <h1 className='text-center'>Create Order</h1>
-      <form onSubmit={formik.handleSubmit}>
+      {productCount!=0?
+      <>
+       <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
         {renderInputs} 
       </div>
        <button type="submit" className="btn btn-primary"  disabled={!formik.isValid}>Submit</button>
       </form>
- 
+      <h2 className='text-center'>Your Cart</h2>
   <table className="table mt-3 ">
   <thead>
     <tr className='text-center'> 
@@ -127,7 +130,9 @@ if(cartDataLoading ){
     :<Loading/>}
   </tbody>
  
-</table> 
+  </table> 
+      </>
+      :<p className='text-center mt-5'>You Haven't Shopped Yet!</p>} 
     </div>
   )
 }

@@ -25,7 +25,7 @@ export default function Categories() {
    }
    return (
      <div className='container mt-4'>
-     <Swiper
+       <Swiper
       modules={[Navigation, Pagination,Autoplay ]}
       spaceBetween={50}
       slidesPerView={4.5}
@@ -36,6 +36,7 @@ export default function Categories() {
       }}
       pagination={{
          clickable: true ,
+        //  el:'.swiper-custom-pagination'
       }}
      
       // onSlideChange={() => console.log('slide change')}
@@ -48,8 +49,8 @@ export default function Categories() {
                 </Link>
               </SwiperSlide>
       ):<h2>Categories Not Found</h2>}
-    </Swiper>   
-      
+       </Swiper>   
+      {/* <div className='swiper-custom-pagination'></div> */}
      </div>  
    )
 }

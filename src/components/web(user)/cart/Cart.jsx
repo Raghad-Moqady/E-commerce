@@ -58,9 +58,10 @@ export default function Cart() {
       }
       
     }
-    const decrease=async(id)=>{ 
+    const decrease=async(id,quantity)=>{ 
       try{ 
         setDecLoading(true);
+        if(quantity>1){
           const {data}=await axios.patch(`${import.meta.env.VITE_API_URL}/cart/decraseQuantity`,
           {productId:id},
           {
@@ -68,8 +69,10 @@ export default function Cart() {
          { Authorization :`Tariq__${token}`}
          } 
          );
-         setDecLoading(false);
+        
         //  console.log(data);
+        } 
+        setDecLoading(false);
       }catch(error){
         toast.error('Error');
       }  
@@ -154,7 +157,7 @@ export default function Cart() {
               <div className="quantity ">
               {decLoading||incLoading?<Loading/>:
                 <>  
-                <button onClick={()=>decrease(product.details._id)}className='me-1'>
+                <button onClick={()=>decrease(product.details._id,product.quantity)}className='me-1'>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={16}
