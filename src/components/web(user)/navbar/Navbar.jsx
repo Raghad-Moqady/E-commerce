@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CartContext } from '../context/CartFeatures';
-import Loading from '../Loading.jsx'
+import Loading from '../../pages/loader/Loading.jsx'
 import { UserContext } from '../context/UserContext.jsx';
+import style from './Navbar.module.css';
 
 export default function Navbar() {
   const {productCount}=useContext(CartContext);
@@ -22,7 +23,7 @@ export default function Navbar() {
     return<Loading/>
   }
   return ( 
-    <nav className="navbar navbar-expand-lg bg-body-tertiary ">
+    <nav className={`${style.navbar} navbar navbar-expand-lg`}>
       
       <div className="container">
       <a className="navbar-brand" href="#" style={{paddingTop: 0}}>

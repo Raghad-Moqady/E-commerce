@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import './Cart.css'
 import { CartContext } from '../context/CartFeatures.jsx';
 import { useQuery } from 'react-query';
-import Loading from '../Loading.jsx' 
+import Loading from '../../pages/loader/Loading.jsx' 
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';

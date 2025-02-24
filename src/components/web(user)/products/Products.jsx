@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Categories from '../categories/Categories'
 import axios from 'axios';
-import Loading from '../Loading';
+import Loading from '../../pages/loader/Loading';
 import style from './Products.module.css';
 import { Link } from 'react-router-dom';
 
@@ -47,7 +47,7 @@ export default function Products() {
     ) 
     :'No Products Found'}  
     </div>
- <nav aria-label="Page navigation example " className=' d-flex justify-content-center mt-4'>
+    <nav aria-label="Page navigation example " className=' d-flex justify-content-center mt-4'>
   <ul className="pagination">
     <li className="page-item"  >
       <a className="page-link" href="#" aria-label="Previous">
@@ -61,8 +61,7 @@ export default function Products() {
       </a>
     </li>
   </ul>
-  </nav>
-
+    </nav> 
    </div>
   
    </>

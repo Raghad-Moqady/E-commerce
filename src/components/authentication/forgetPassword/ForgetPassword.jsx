@@ -1,11 +1,12 @@
-import React from 'react'
-import style from '../Auth.module.css'
+import React, { useState } from 'react'
 import { useFormik } from 'formik'
-import Input from '../../pages/Input.jsx';
-import { forgetPasswordSchema } from '../validation/validate';
+import Input from '../Input.jsx'; 
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { SuccessToast } from '../../pages/toast/toast.js';
+import { forgetPasswordSchema } from '../validation/validate.js';
+import forgetPassword from '../../img/ForgetPassword.jpg';
+import SharedForm from '../sharedForm/SharedForm.jsx';
 
 export default function ForgetPassword() {
     const initialValues={
@@ -14,22 +15,15 @@ export default function ForgetPassword() {
         code:''
     }
     const navigate=useNavigate();
+    const [loading,setLoading]=useState(false);
     const onSubmit= async values=>{
+      setLoading(true);
          const {data}=await axios.patch(`${import.meta.env.VITE_API_URL}/auth/forgotPassword`,values);
-     
-         if(data.message=='success'){
-            
-            toast.success('Your password has been changed successfully', {
-                position: "bottom-center",
-                autoClose: false,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
-             navigate('/login') ;  
+       setLoading(false); 
+
+         if(data?.message=='success'){ 
+          SuccessToast('Your password has been changed successfully');
+            navigate('/login') ;  
          }
     }
     const formik =useFormik({
@@ -76,20 +70,18 @@ export default function ForgetPassword() {
         />
    )
   return (
-    <div className={`container ${style.formDesign} p-3 mt-5 rounded-0`}>
-    <h2 className='text-center mt-3 mb-4'>Reset Password</h2>
-    <form onSubmit={formik.handleSubmit}>
-    <div className="container">
-        {renderInputs}
-        <div className='d-flex m-auto  justify-content-center w-75 '>
-        <button className='rounded-0 border-1 w-50 btn btn-outline-light' disabled={!formik.isValid}  type='submit'>Reset</button> 
-      </div>
-      <div className='d-flex justify-content-center mt-2 '>
-        <Link to='/login' className={`${style.ForgetPasswordLogin} btn`}  disabled={!formik.isValid}  type='submit'>LogIn</Link> 
-      </div>
-      </div>
-      
-    </form>
-    </div>
+    <SharedForm
+       title='Reset Password'
+       formik_handelSubmit={formik.handleSubmit}
+       renderInputs={renderInputs}
+       secondaryAction='LogIn'
+       mainAction='Reset'
+       formik_isValid={formik.isValid}
+       secondaryAction_targetComponent={"/login"}
+       loading={loading}
+       image={forgetPassword}
+       encType=''
+     /> 
+    
   )
 }

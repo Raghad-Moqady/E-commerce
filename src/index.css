@@ -1,4 +1,4 @@
-body{
-    background-color: #eee;
-    
+:root {
+    --main-color: #6e7da5;
+    --secondary-color: #6e7da56c;
 }

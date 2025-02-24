@@ -1,27 +1,23 @@
  
-.Home{
-background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),  url('../../img/img2.webp');
-background-repeat: no-repeat;
-background-size: cover;
-background-position:top;
- background-attachment: fixed;
-height: 30rem; 
-
-}
-.title{ 
+.Home{ 
   
+height: 30rem;  
+}
+.title{  
     width: 0;
     white-space: nowrap;
     overflow: hidden;
     border-right:1px solid #3333;
-    animation: typing 3s infinite alternate-reverse steps(27) , blink infinite 0.7s;
+    margin-top: 10rem;
+    color: var(--main-color);
+    animation: typing 3s  forwards steps(27) , blink infinite 0.7s;
   }
   @keyframes typing{
    from {
      width: 0;
    }
    to{
-     width:490px;
+     width:535px;
    }
   }
   @keyframes blink{
@@ -32,7 +28,16 @@ height: 30rem;
      border-color: #33333300;
    }
   }
-  .header{
-    margin-top: 12rem;
-    margin-left: 7rem;
-  }
+  /* .animated_glow_divider {
+    height: 1px;
+    width: 80%;
+    margin: 30px auto;
+    background: linear-gradient(90deg, transparent,#6e7da5, transparent);
+    animation: glow_animation 1.5s infinite alternate;
+}
+
+@keyframes glow_animation {
+    0% { box-shadow: 0 0 10px #6e7da5; }
+    100% { box-shadow: 0 0 20px #6e7da5, 0 0 30px #6e7da5; }
+} */
+ 

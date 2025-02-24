@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination,Autoplay } from 'swiper/modules';
-// import style from './categories.module.css'
+import style from './categories.module.css'
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Link } from 'react-router-dom';
-import Loading from '../Loading';
+import Loading from '../../pages/loader/Loading';
+import Alert from '../../pages/alert/Alert';
  
 
 export default function Categories() {
@@ -25,9 +26,9 @@ export default function Categories() {
    }
    return (
      <div className='container mt-4'>
-       <Swiper
-      modules={[Navigation, Pagination,Autoplay ]}
-      spaceBetween={50}
+      <Swiper
+      modules={[Navigation, Pagination ,Autoplay ]}
+      spaceBetween={100}
       slidesPerView={4.5}
       navigation
       loop={true}
@@ -36,19 +37,18 @@ export default function Categories() {
       }}
       pagination={{
          clickable: true ,
-        //  el:'.swiper-custom-pagination'
-      }}
-     
+      }} 
       // onSlideChange={() => console.log('slide change')}
       // onSwiper={(swiper) => console.log(swiper)}
+     
     >
      {data?.categories.length ? data?.categories.map((category)=>
-              <SwiperSlide key={category._id}>
-                <Link to={`/products/category/${category._id}`}>{/* هون بنكتب المسار اللي بدنا اياه مش شرط يكون متل الباكإند بس اهم اشي ابعت فيه الآي دي عشان بلزمني فيما بعد برابط الباكإند*/}
-                 <img src={category.image.secure_url} alt="category_img" />
-                </Link>
+              <SwiperSlide key={category._id}>   
+                <Link className='w-25' to={`/products/category/${category._id}`}>{/* هون بنكتب المسار اللي بدنا اياه مش شرط يكون متل الباكإند بس اهم اشي ابعت فيه الآي دي عشان بلزمني فيما بعد برابط الباكإند*/}
+                 <img className='w-100' src={category.image.secure_url} alt="category_img" />
+                </Link> 
               </SwiperSlide>
-      ):<h2>Categories Not Found</h2>}
+      ):<Alert message='Categories Not Found'/>}
        </Swiper>   
       {/* <div className='swiper-custom-pagination'></div> */}
      </div>  

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
 import style from './Profile.module.css'
-import Loading from '../Loading'
+import Loading from '../../pages/loader/Loading'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 export default function Profile() {

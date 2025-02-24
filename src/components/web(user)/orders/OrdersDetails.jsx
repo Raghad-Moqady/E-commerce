@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../context/CartFeatures'
-import Loading from '../Loading';
+import Loading from '../../pages/loader/Loading';
 import { date } from 'yup';
 
 export default function OrdersDetails() {

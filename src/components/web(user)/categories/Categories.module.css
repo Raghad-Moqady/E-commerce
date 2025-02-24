@@ -1,4 +1,17 @@
 /* 2024
 .swiper{
-    padding: 50px;
+    padding: 50px ;
 } */
+ 
+/* .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal {
+    bottom: var(--swiper-pagination-bottom, 8px);
+    top: var(--swiper-pagination-top, auto);
+    left: 0;
+    width: 100%;
+    background-color:red !important;
+} */
+
+ /* .swiper .swiper-pagination{
+    background-color:red !important;
+ } */
+ 

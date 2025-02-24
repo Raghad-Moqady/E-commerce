@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react'
-import Input from '../../pages/Input.jsx'
-import { useFormik } from 'formik'
-import { loginSchema } from '../validation/validate.js'
+import React, { useEffect, useState } from 'react'
+import Input from '../Input.jsx'
+import { useFormik } from 'formik' 
 import axios from 'axios'
-import {toast} from 'react-toastify';
-import style from '../Auth.module.css'
-import { Link, useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
-import { UserContext } from '../context/UserContext.jsx'
-import Loading from '../Loading.jsx'
-  
+import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react' 
+import loginImg from '../../img/LoginPhoto.jpg'
+import SharedForm from '../sharedForm/SharedForm.jsx'
+import { SuccessToast } from '../../pages/toast/toast.js'
+import { UserContext } from '../../web(user)/context/UserContext.jsx'
+import { loginSchema } from '../validation/validate.js'
 
 export default function Login() { 
   let { setUserToken }=useContext(UserContext);
+  const [loading,setLoading]=useState(false);
   const navigate =useNavigate();
   
   const initialValues={//نفس اسماء متغيرات الname, اللي من الباك اند
@@ -21,22 +21,13 @@ export default function Login() {
   } //هدول القيم همي نفسهم اللي رح نوخدهم من اليوزر ونبعتهم بعدين للباك اند 
 
   const onSubmit= async values=>{//values ممكن تغييرها لاي اسم بدي اياه 
+    setLoading(true);
     const {data}= await axios.post(`${import.meta.env.VITE_API_URL}/auth/signin`,values);
-    
-    if(data.message=='success'){//الباك اند رح يرجع token 
-     localStorage.setItem("userToken",data.token);
-     setUserToken(data.token);//بدل الداتا ديكريبشن اللي كان وجود بالآب
-     toast.success('Done', {  
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      });
-      
+    setLoading(false);
+    if(data?.message=='success'){//الباك اند رح يرجع token 
+     localStorage.setItem("userToken",data?.token);
+     setUserToken(data?.token);//بدل الداتا ديكريبشن اللي كان وجود بالآب 
+      SuccessToast("The login process was completed successfully");
       navigate('/');
     }
 }
@@ -80,21 +71,18 @@ export default function Login() {
 
   return (
     <>
-    <div className={`container ${style.formDesign} p-3 mt-5 rounded-0`}>
-    <h2 className='text-center mt-3 mb-4'>Login</h2>
-    <form onSubmit={formik.handleSubmit} >
-      <div className="container-fluid">
-        {renderInputs} 
-      <div className='w-75 m-auto d-flex justify-content-end '>
-        <Link className={` text-decoration-none ${style.LinkForget}`} to="/sendCode">Forgot Password?</Link>
-      </div>
-      <div className='d-flex justify-content-center mt-3'>
-        <button className='rounded-5 border-1 w-50 btn btn-outline-light  '  type='submit' disabled={!formik.isValid}>Login</button> 
-      </div>
-      </div> 
-      
-    </form>
-    </div>
+    <SharedForm
+    title='Login'
+    formik_handelSubmit={formik.handleSubmit}
+    renderInputs={renderInputs}
+    secondaryAction='Forgot Password?'
+    secondaryAction_targetComponent={"/sendCode"}
+    mainAction='Login'
+    formik_isValid={formik.isValid} 
+    loading={loading}
+    image={loginImg}
+    encType=''
+   />  
     </>
   )
 }

@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react'
 import { CartContext } from '../context/CartFeatures'
-import Loading from '../Loading.jsx'
+import Loading from '../../pages/loader/Loading.jsx'
 import { Link, useNavigate } from 'react-router-dom';
 import InputCreatOrder from '../../pages/InputCreatOrder.jsx';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext.jsx';
 import { toast } from 'react-toastify';
-import { CreateorderSchema } from '../validation/validate.js';
+import { CreateorderSchema } from '../../authentication/validation/validate.js';
 
 export default function CreateOrder() {
  

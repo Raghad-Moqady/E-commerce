@@ -1,12 +1,11 @@
-import React from 'react'
-import Input from '../../pages/Input'
-import { useFormik } from 'formik'
-import { validationSchema } from '../validation/validate.js'
-import axios from 'axios'
-import {toast} from 'react-toastify';
-import style from '../Auth.module.css'
-import { Link } from 'react-router-dom'
-
+import React, { useState } from 'react';
+import Input from '../Input.jsx';
+import { useFormik } from 'formik';
+ import axios from 'axios';
+import { SuccessToast } from '../../pages/toast/toast.js';
+import { validationSchema } from '../validation/validate';
+import register from '../../img/registerImg.jpg';
+import SharedForm from '../sharedForm/SharedForm.jsx';
 export default function Register() {
   //لما اعمل تغيير للصورة مابستدعي الطريقة العادية متل اي انبوت لان بهاي الحالة فقط رح يحط اسم الصورة مع الامتداد
   //ولكن بستدعي هاد الفنكشن الخاص عشان يضيف بطريقته الخاصة وهي اسناد كل معلومات الصورة او الملف للانيشيال فاليو
@@ -19,7 +18,7 @@ export default function Register() {
          password:'',
          image:'',
   } //هدول القيم همي نفسهم اللي رح نوخدهم من اليوزر ونبعتهم بعدين للباك اند 
-
+  const [loading,setLoading]=useState(false);
   const onSubmit=async values=>{//values ممكن تغييرها لاي اسم بدي اياه 
  //استعملت طريقة الفورم داتا عشان الملفات ما بزبط نرفعها بالطريقة المباشرة والعادية للباكإند
  //الباك والفرونت بستعملو الفورم داتا 
@@ -30,20 +29,13 @@ export default function Register() {
     formData.append("email",values.email);
     formData.append("password",values.password);
     formData.append("image",values.image);
-    
+    setLoading(true);
     const {data}= await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`,formData);
-    if(data.message=='success'){
+    setLoading(false);
+
+    if(data?.message=='success'){
      formik.resetForm();
-     toast.success('account created successfully, please verify your email to login', {
-      position: "bottom-center",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      });
+     SuccessToast('account created successfully, please verify your email to login');
     }
 }
  
@@ -103,24 +95,19 @@ export default function Register() {
    )
   return (
     <>
-    <div className={`container ${style.formDesign} p-3 mt-5 rounded-0 `}>
-    <h2 className='text-center mt-3 mb-4'>Create Account</h2>
-    {/*encType="multipart/form-data">>>
-      بالعادة الفورم لما يبعت البيانات بشفرها بطريقة معينة لا تتناسب مع الملفات عشان هيك لازم نضيف هاي الجملة 
-    */}
-    <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
-      <div className="container">
-          {renderInputs}
-      <div className='w-75 m-auto d-flex justify-content-end '>
-        <Link className={` text-decoration-none ${style.logIn}`} to="/logIn">LogIn</Link>
-      </div>
-      <div className='d-flex justify-content-center mt-3'>
-         <button className='rounded-5 border-1 w-50 btn btn-outline-light  ' type='submit' disabled={!formik.isValid}>Register</button> 
-      </div>
-      </div>
-    
-    </form>
-    </div>
+      <SharedForm
+           title='Create Account'
+           formik_handelSubmit={formik.handleSubmit}
+           renderInputs={renderInputs}
+           secondaryAction='LogIn'
+           mainAction='Register'
+           formik_isValid={formik.isValid}
+           secondaryAction_targetComponent={"/login"}
+           loading={loading}
+           image={register}
+           encType="multipart/form-data"
+         /> 
+   
     </>
   )
 }

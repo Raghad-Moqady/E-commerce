@@ -12,7 +12,7 @@ export default function UserContextProvider({children}) {
          const {data}=await axios.get(`${import.meta.env.VITE_API_URL}/user/profile`,
          { headers: {Authorization:`Tariq__${userToken}`} } )   
         // console.log(data);
-         setUserData(data.user); 
+         setUserData(data?.user); 
          setLoading(false);
        } 
     }
