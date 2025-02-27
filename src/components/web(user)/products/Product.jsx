@@ -118,11 +118,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Alert from '../../pages/alert/Alert';
-import {Rating } from "@mui/material";
+import {Avatar, Rating } from "@mui/material";
 import style from './Product.module.css'
+import { UserContext } from '../context/UserContext';
+import CreateReview from '../reviews/createReview/CreateReview';
 
 export default function Product() {
-  const { addToCartContext, setCartDataLOading } = useContext(CartContext);
+  const { addToCartContext, setCartDataLOading } = useContext(CartContext); 
+  const { userToken } = useContext(UserContext); 
   const navigate = useNavigate();
   const { productId } = useParams();
   const token = localStorage.getItem('userToken'); // Consider retrieving from context if available
@@ -132,7 +135,7 @@ export default function Product() {
 
   const addToCart = async (productId) => {
     await addToCartContext(productId);
-    setCartDataLOading(true);
+    // setCartDataLOading(true);
     navigate('/cart');
   };
 
@@ -145,7 +148,6 @@ export default function Product() {
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/products/${productId}`);
       return data?.product; 
-
 
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -178,6 +180,12 @@ export default function Product() {
           <h4>
           Final Price: <span className="text-success">{data?.finalPrice}$</span>
           </h4>}
+          <button
+            className={`${style.btn} btn`}
+            onClick={() => (token ? addToCart(data?._id) : navigate('/register'))}
+          >
+            Add To Cart
+          </button>
         </div>
       <div className='w-25 m-auto pb-5'>
       <img
@@ -195,14 +203,14 @@ export default function Product() {
          <SwiperSlide >
               <div className='w-25 m-auto'>
               <img
-                onClick={() => changeImg(data.mainImage.secure_url)}
+                onClick={() => changeImg(data?.mainImage.secure_url)}
                 src={data.mainImage.secure_url}
                 alt="Additional product view"
                 className="img-fluid w-75"
               />
               </div> 
             </SwiperSlide>
-        {data.subImages?.length > 0 ? (
+        {data?.subImages?.length > 0 ? (
           data.subImages.map((image, index) => (
             <SwiperSlide key={index}>
               <div className='w-25 m-auto'>
@@ -224,13 +232,27 @@ export default function Product() {
       <div className=" mt-4">
         <div>
         <h4>Description:  </h4> 
-          <p>{data.description}</p>
-          <button
-            className={`${style.btn} btn`}
-            onClick={() => (token ? addToCart(data._id) : navigate('/register'))}
-          >
-            Add To Cart
-          </button>
+          <p>{data?.description}</p>
+        <h4>Feedbacks: </h4>  
+        {data?.reviews.length?data?.reviews.map((review,index)=>
+          <div className='mb-3' key={index}>
+          <div className='d-flex mb-1'>
+          <Avatar>{review.createdBy.userName.charAt(0)}</Avatar>
+          <h5 className='ms-2 mt-1'>{ review.createdBy.userName}</h5>
+          </div>
+          <div className='d-flex'>
+          <div className=' bg-body-secondary py-2 px-2 w-100 rounded-2 me-2'> {review.comment} </div>
+          <Rating className='mt-1' name={`rating-${index}`} value={review.rating}  readOnly  precision={0.1}/>
+          </div>
+          </div>
+      ):<Alert message='There are no comments yet'/>} 
+       {/* فقط يسمح باضافة تعليق اذا كان مسجل دخوله + المنتج واصل للمستخدم  */}
+        {userToken && 
+        <>
+          <hr />
+          <CreateReview/>
+        </> 
+        }
         </div>
       </div>
     </div>

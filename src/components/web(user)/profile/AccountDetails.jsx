@@ -8,7 +8,7 @@ export default function AccountDetails() {
     <>
       <h2 >Account Details</h2><hr></hr>
       <div className='pb-3'>
-      <p style={{margin: 0, fontSize: 'large'}}><b>Created At:</b> {userData.createdAt}<br></br><b>Updated At:</b> {userData.updatedAt}<br></br><b>Password Changed At:</b> {userData.changePasswordTime}</p>
+      <p style={{margin: 0, fontSize: 'large'}}><b>Created At:</b> {userData.createdAt}<br></br><b>Updated At:</b> {userData.updatedAt}<br></br></p>
       </div>
     </>
   )

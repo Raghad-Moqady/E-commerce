@@ -5,3 +5,8 @@
     height:35rem;
  
 }
+.sidebar{
+     border-right: 2px solid var(--secondary-color) ;
+    height: 89vh;
+}
+ 

@@ -6,40 +6,50 @@ import Loading from '../../pages/loader/Loading.jsx'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
+import { ErrorToast } from '../../pages/toast/toast.js';
 
 export default function Cart() {
-  
     //عشان نعرض البيانات اللي جاي من الباك إند بهاي الصفحة هناك 3خطوات :
     //1. بده يصير ايفينت معين مثل onClick,useQuere,useEffect
     //2.عشان يستدعي فنكشن معين انا بنشؤه
     //3.هاد الفنكشن بده يستدعي الفنكشن الموجود بالكونتكست وبهيك بستخدم البيانات وبعرضها هون 
-    const {getCartContextInfo,removeItemFromCartContext,cartDataLoading,setCartDataLOading,token,productCount} =useContext(CartContext);
-    const [data,setData]=useState({});
-    const [decLoading,setDecLoading]=useState(false);
-    const [incLoading,setIncLoading]=useState(false);
- 
+    const {getCartContextInfo,CartData,removeItemFromCartContext,cartDataLoading,setCartDataLOading,token,productCount} =useContext(CartContext);
+    // const [data,setData]=useState({});
+    // const [decLoading,setDecLoading]=useState(false);
+    const [incDecLoading,setIncDecLoading]=useState(false);
+    const [removeItemLoading,setRemoveItemLoading]=useState(false);
+    const [clearCartLoading,setClearCartLoading]=useState(false);
+    // const [chaeckOutLoading,setCheckOutLoading]=useState(false);
     let [total,setTotal]=useState(0);
+    
     let updateTotal=(quantity,finalPrice)=>{
       total+=quantity * finalPrice;
     }
-   
+    //done
     const getCartInfo=async()=>{
-        const cartInfo= await getCartContextInfo();  
-        setData(cartInfo);
-        return cartInfo;
+        await getCartContextInfo();  
+        // setData(cartInfo);
+        // return cartInfo;
     }
+    //done
      const removeItem=async(productId)=>{
-     const res = await removeItemFromCartContext(productId);
+      setRemoveItemLoading(true);
+     await removeItemFromCartContext(productId);
+     getCartInfo();
+     setRemoveItemLoading(false);
     }
+
     const clearCart=async()=>{
       try{
+        setClearCartLoading(true);
         const {data}= await axios.patch(`${import.meta.env.VITE_API_URL}/cart/clear`,
          {data:''},
             {
                 headers: 
                { Authorization :`Tariq__${token}`}
             }
-            );  
+            ); 
       if(data.message=='success'){ 
         toast.success('Cart deleated Successfully', {
             position: "bottom-center",
@@ -51,16 +61,19 @@ export default function Cart() {
             progress: undefined,
             theme: "light",
             });
-
+            getCartInfo();
       }
+      setClearCartLoading(false);
       }catch(error){
         toast.error('Error');
+        setClearCartLoading(false);
+
       }
       
     }
     const decrease=async(id,quantity)=>{ 
       try{ 
-        setDecLoading(true);
+        setIncDecLoading(true);
         if(quantity>1){
           const {data}=await axios.patch(`${import.meta.env.VITE_API_URL}/cart/decraseQuantity`,
           {productId:id},
@@ -72,15 +85,17 @@ export default function Cart() {
         
         //  console.log(data);
         } 
-        setDecLoading(false);
+        setIncDecLoading(false);
+        getCartInfo();
       }catch(error){
-        toast.error('Error');
+        ErrorToast('Error');
+        setIncDecLoading(false);
       }  
     }
 
     const increase =async(id)=>{
       try{
-        setIncLoading(true);
+        setIncDecLoading(true);
         const {data}=await axios.patch(`${import.meta.env.VITE_API_URL}/cart/incraseQuantity`,
         {productId:id},
         {
@@ -88,11 +103,12 @@ export default function Cart() {
        { Authorization :`Tariq__${token}`}
        } 
    );
-   setIncLoading(false);
+   setIncDecLoading(false);
   //  console.log(data);
-   
+  getCartInfo();
     }catch(error){
-      toast.error('Error');
+      ErrorToast('Error');
+      setIncDecLoading(false);
     }
     }
     // const {data,isLoading} =useQuery("cartInfo",getCartInfo);
@@ -101,7 +117,7 @@ export default function Cart() {
     // }
     useEffect(()=>{
       getCartInfo();
-    },[data])
+    },[])
 
     if(cartDataLoading){
       return <Loading/>
@@ -128,14 +144,17 @@ export default function Cart() {
               </div>
             </div>
 
-             {data?.products? data.products.map((product)=>
+             {CartData?.products? CartData?.products.map((product)=>
             <div className="item" key={product.details._id }>
               <div className="product-info">
                 <img src={product.details.mainImage.secure_url} />
                 <div className="product-details">
                   <h2>{product.details.name}</h2>
                   <span>Color:black</span>
+                
                   <a href="#" onClick={()=>removeItem(product.details._id)}>
+                       {removeItemLoading?<CircularProgress color="inherit" size={20} />:
+                    <>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width={24}
@@ -149,13 +168,14 @@ export default function Cart() {
                         d="M5.29289 5.79289C5.68342 5.40237 6.31658 5.40237 6.70711 5.79289L12 11.0858L17.2929 5.79289C17.6834 5.40237 18.3166 5.40237 18.7071 5.79289C19.0976 6.18342 19.0976 6.81658 18.7071 7.20711L13.4142 12.5L18.7071 17.7929C19.0976 18.1834 19.0976 18.8166 18.7071 19.2071C18.3166 19.5976 17.6834 19.5976 17.2929 19.2071L12 13.9142L6.70711 19.2071C6.31658 19.5976 5.68342 19.5976 5.29289 19.2071C4.90237 18.8166 4.90237 18.1834 5.29289 17.7929L10.5858 12.5L5.29289 7.20711C4.90237 6.81658 4.90237 6.18342 5.29289 5.79289Z"
                         fill="#6C7275"
                       />
-                    </svg>
-                    remove
+                    </svg> 
+                   remove
+                    </>
+                   }
                   </a>
                 </div>
               </div>
-              <div className="quantity ">
-              {decLoading||incLoading?<Loading/>:
+              <div className="quantity "> 
                 <>  
                 <button onClick={()=>decrease(product.details._id,product.quantity)}className='me-1'>
                   <svg
@@ -174,7 +194,8 @@ export default function Cart() {
                     />
                   </svg>
                 </button>
-                <span>{product.quantity} </span>
+                {incDecLoading?<CircularProgress color="inherit" size={20} />:
+                <span>{product.quantity} </span>}
                 <button onClick={()=>increase(product.details._id)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -192,13 +213,13 @@ export default function Cart() {
                   </svg>
                 </button>
                 </> 
-              } 
+             
               </div>
               <div className="price">${product.details.finalPrice}</div>
               <div className="subtotal">${product.quantity*product.details.finalPrice}</div>
               {updateTotal(product.quantity,product.details.finalPrice)}
             </div>  
-            ):<Loading/>} 
+            ):<CircularProgress color="inherit" size={20} />} 
           </div>
           <hr></hr>
           {productCount?<div className='d-flex flex-column align-items-end  '>
@@ -208,9 +229,13 @@ export default function Cart() {
               </div>
               <div className="checkout mt-2 ">
                 <Link to='/createOrder'>Chekout</Link>
-              </div>
+              </div> 
               <div className="clearCart mt-2 ">
-                <a  href="#" onClick={clearCart}>Clear Cart</a>
+                <a  href="#" onClick={clearCart}>
+                {clearCartLoading?<CircularProgress color="inherit" size={20} />:
+                  "Clear Cart"
+                }
+                </a>
               </div> 
           </div>:
            <div className="d-flex justify-content-center">

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination,Autoplay } from 'swiper/modules';
-import style from './categories.module.css'
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -11,7 +11,7 @@ import 'swiper/css/scrollbar';
 import { Link } from 'react-router-dom';
 import Loading from '../../pages/loader/Loading';
 import Alert from '../../pages/alert/Alert';
- 
+import style from './categories.module.css'
 
 export default function Categories() {
    const getCategories=async()=>{

@@ -19,7 +19,7 @@ export default function Navbar() {
   // if(userData==null && userToken!=null){
   //   return<Loading/>
   // }
-  if(loading&& userToken!=null){
+  if(loading && userToken!=null){
     return<Loading/>
   }
   return ( 
@@ -27,7 +27,7 @@ export default function Navbar() {
       
       <div className="container">
       <a className="navbar-brand" href="#" style={{paddingTop: 0}}>
-        <p>Raghad Shop</p>
+        <p className='m-0'>Raghad Store</p>
      {/* <img src='C:\Users\HP\Desktop\fullStack\FrontEnd\React\all\ecommerce\src\components\img/logo.png'></img>*/}
       </a>
       
@@ -35,7 +35,7 @@ export default function Navbar() {
         <span className="navbar-toggler-icon" />
       </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav m-auto ">
+        <ul className="navbar-nav m-auto">
          
           <li className="nav-item ">
             <Link className="nav-link" to="/">Home</Link>

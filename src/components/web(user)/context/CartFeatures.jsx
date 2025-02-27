@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
- 
+import { ErrorToast, SuccessToast } from './../../pages/toast/toast';
 
 
 export const CartContext= createContext(null);// هاد المتغير اللي رح ابعت فيه المتغيرات اللي بدي تكون موجودة بالكمبوننتس ورح استخدمه بالكمبوننت برا
@@ -20,23 +20,15 @@ export function CartContextProvider({children}){//childern==component
                { Authorization :`Tariq__${token}`}
             }
             )
-            if(data.message=='success'){
-                toast.success('Product Added Successfully', {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    });
-                    
+            if(data?.message=='success'){
+                SuccessToast('Product Added Successfully');
+                  
             }
         }catch(error){
-           toast.error('product already exists');
+            ErrorToast('product already exists'); 
         }
     }
+
     const getCartContextInfo=async()=>{//هاي الملعومات بدي اعرضهم بصفحة السلة عشان هيك بروح استدعي الفنكشن من صفحة الكارت 
          try{ 
             const {data}= await axios.get(`${import.meta.env.VITE_API_URL}/cart`,
@@ -45,14 +37,15 @@ export function CartContextProvider({children}){//childern==component
                { Authorization :`Tariq__${token}`}
             }
             );
-             
-            setProductCount(data.count);
+            console.log(data);
+            setProductCount(data?.count);
+            //عشان الrefresh
             setCartDataLOading(false);
             setCartData(data);
-            return data;
+            // return data;
          }catch(error){
-            toast.error('Error');
-         }
+            ErrorToast('Error');
+          }
     }
 
     const removeItemFromCartContext=async(productId)=>{
@@ -64,24 +57,11 @@ export function CartContextProvider({children}){//childern==component
             { Authorization :`Tariq__${token}`}
           }
           );
-         
-          if(data.message=='success'){ 
-            toast.success('Product deleated Successfully', {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
-   
+          if(data?.message=='success'){ 
+            SuccessToast('Product deleated Successfully');
           }
-          return data;
-   
         }catch(error){
-            toast.error('Error');
+            ErrorToast('Error');
         }
     
 

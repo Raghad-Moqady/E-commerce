@@ -2,12 +2,14 @@ import React, { useContext, useState } from 'react'
 import { CartContext } from '../context/CartFeatures'
 import Loading from '../../pages/loader/Loading.jsx'
 import { Link, useNavigate } from 'react-router-dom';
-import InputCreatOrder from '../../pages/InputCreatOrder.jsx';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext.jsx';
 import { toast } from 'react-toastify';
 import { CreateorderSchema } from '../../authentication/validation/validate.js';
+import Input from '../../authentication/Input.jsx';
+import { SuccessToast } from '../../pages/toast/toast.js';
+import { CircularProgress } from '@mui/material';
 
 export default function CreateOrder() {
  
@@ -15,6 +17,8 @@ const {CartData,cartDataLoading,productCount}=useContext(CartContext);
 
 const token =localStorage.getItem("userToken");
 const navigate=useNavigate();
+const [loading,setLoading]=useState(false);
+
 const initialValues ={
     couponName:'',
     address:'',
@@ -22,6 +26,7 @@ const initialValues ={
 }
 const onSubmit=async values=>{
    try{
+    setLoading(true);
     const {data}=await axios.post(`${import.meta.env.VITE_API_URL}/order` ,
     values,
     {
@@ -31,21 +36,14 @@ const onSubmit=async values=>{
     );  
     console.log(values);
     if(data.message=='success'){ 
-      toast.success('Operation accomplished Successfully', {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-      });
+      SuccessToast('Operation accomplished Successfully');
+      setLoading(false);
      navigate('/profile/orders');
     }
    }
    catch(error){
     toast.error('Error');
+    setLoading(false);
    }
 }
 const formik =useFormik({
@@ -77,7 +75,7 @@ const inputs=[
 }]
  
 const renderInputs=inputs.map((input ,index)=>
-<InputCreatOrder
+<Input
    id={input.id}
    type={input.type}
    name={input.name}
@@ -91,22 +89,28 @@ const renderInputs=inputs.map((input ,index)=>
 />
 )
 
-if(cartDataLoading ){
-  return <Loading/>
-}
+// if(cartDataLoading ){
+//   return <Loading/>
+// }
 
   return (
     <div className='container'>
-      <h1 className='text-center'>Create Order</h1>
+      <h1 className='text-center mt-4'>Create Order</h1>
       {productCount!=0?
       <>
        <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
         {renderInputs} 
       </div>
-       <button type="submit" className="btn btn-primary"  disabled={!formik.isValid}>Submit</button>
+      <div className="text-center"> 
+       <button type="submit" className="btn bg-success-subtle w-50 rounded-5 " hover  disabled={!formik.isValid}>
+         {loading?<CircularProgress color="inherit" size={20} />:
+        "Submit"
+      }
+        </button>
+       </div>
       </form>
-      <h2 className='text-center'>Your Cart</h2>
+      <h2 className='text-center mt-4'>Your Cart</h2>
   <table className="table mt-3 ">
   <thead>
     <tr className='text-center'> 

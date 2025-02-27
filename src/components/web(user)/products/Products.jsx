@@ -4,12 +4,14 @@ import axios from 'axios';
 import Loading from '../../pages/loader/Loading';
 import style from './Products.module.css';
 import { Link } from 'react-router-dom';
+import { Alert, Rating } from '@mui/material';
 
 export default function Products() {
   const [data,setData]=useState(null);
   const [loading,setLoding]=useState(false); 
-  const getAllProduct=async(page=1,limit=4)=>{
+  const getAllProducts=async(page=1,limit=5)=>{
     setLoding(true);
+    //&search=""
     const {data}=await axios.get(`${import.meta.env.VITE_API_URL}/products?page=${page}&limit=${limit}`);
     setLoding(false);
     setData(data);
@@ -17,53 +19,50 @@ export default function Products() {
   }
   const renderLI=()=>{
     let li=[];
-    let size=(data&&(data.total/data.page));
+    let size=(data&&(data?.total/data?.page));
     console.log(size);
     for(let i=1;i<=size;i++){
-    li.push( <li key={i}  className="page-item"><a className="page-link" href="#" onClick={()=>{getAllProduct(i)}} >{i}</a></li> )
+    li.push( <li key={i}  className="page-item"><a className="page-link" href="#" onClick={()=>{getAllProducts(i)}} >{i}</a></li> )
     }
     return li;
   }
   useEffect(()=>{
-    getAllProduct(); 
-  },[])
-  if(loading){
-    return <Loading/>
-  }
+    getAllProducts(); 
+  },[]) 
+  
   return (
    <>
    <Categories/>
-   <div className='container mt-5'>
+   {loading? <Loading/>:<div className='container mt-5'>
     <div className="row  row-gap-5">
-    {data?.products.length?data.products.map((product,index)=>
-     <div className="col-md-3 " key={index}>
-       <div className={`${style.productImg} h-100 `} >
-           <Link to='/'>
-           <img src={product.mainImage.secure_url} className="card-img-top img-fluid" style={{height:'100%'}} alt="product-img" />
-           </Link>
-       </div> 
-       <div></div>
-     </div> 
+    {data?.products.length?data?.products.map((product)=>
+      <div className='col-lg-2 m-auto' key={product._id}>
+      <div className="card  rounded-5 ">
+      <Link to={`/product/${product._id}`}>
+          <img src={product.mainImage.secure_url} className={` card-img-top rounded-5 img-fluid`} alt="product-img" />
+      </Link>
+     </div>
+   </div> 
     ) 
-    :'No Products Found'}  
+    :<Alert message='No Products'/>}  
     </div>
     <nav aria-label="Page navigation example " className=' d-flex justify-content-center mt-4'>
   <ul className="pagination">
-    <li className="page-item"  >
+    {/* <li className="page-item"  >
       <a className="page-link" href="#" aria-label="Previous">
         <span aria-hidden="true">«</span>
       </a>
-    </li>
+    </li> */}
      {renderLI()} 
-    <li className="page-item" >
+    {/* <li className="page-item" >
       <a className="page-link" href="#" aria-label="Next">
         <span aria-hidden="true">»</span>
       </a>
-    </li>
+    </li> */}
   </ul>
     </nav> 
    </div>
-  
+  }
    </>
   )
 }
