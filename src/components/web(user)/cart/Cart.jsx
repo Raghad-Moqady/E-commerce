@@ -7,7 +7,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
-import { ErrorToast } from '../../pages/toast/toast.js';
+import { ErrorToast, SuccessToast } from '../../pages/toast/toast.js';
+import Title from '../../pages/title/Title.jsx';
 
 export default function Cart() {
     //عشان نعرض البيانات اللي جاي من الباك إند بهاي الصفحة هناك 3خطوات :
@@ -50,18 +51,9 @@ export default function Cart() {
                { Authorization :`Tariq__${token}`}
             }
             ); 
-      if(data.message=='success'){ 
-        toast.success('Cart deleated Successfully', {
-            position: "bottom-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            });
-            getCartInfo();
+      if(data?.message=='success'){ 
+         SuccessToast('Cart deleated Successfully');
+         getCartInfo();
       }
       setClearCartLoading(false);
       }catch(error){
@@ -126,6 +118,7 @@ export default function Cart() {
   return (
     <div className="cart">
     <div className="container">
+      <Title title="Your Cart"/>
       <div className="row ">
         <div className="cart-items ">
           <div className="products" id="products">

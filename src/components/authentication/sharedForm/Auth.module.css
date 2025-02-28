@@ -1,5 +1,6 @@
   .mainPage{
    animation: fadeIn 1.5s ease-in-out;
+   height: 70vh;
   }
   @keyframes fadeIn {
    from {

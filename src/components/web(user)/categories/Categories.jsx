@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import Loading from '../../pages/loader/Loading';
 import Alert from '../../pages/alert/Alert';
 import style from './categories.module.css'
+import Title from '../../pages/title/Title';
 
 export default function Categories() {
    const getCategories=async()=>{
@@ -26,6 +27,7 @@ export default function Categories() {
    }
    return (
      <div className='container mt-4'>
+      <Title title="Categories"/>
       <Swiper
       modules={[Navigation, Pagination ,Autoplay ]}
       spaceBetween={100}
@@ -35,9 +37,9 @@ export default function Categories() {
       autoplay={{
         delay:2000
       }}
-      pagination={{
-         clickable: true ,
-      }} 
+      // pagination={{
+      //    clickable: true ,
+      // }} 
       // onSlideChange={() => console.log('slide change')}
       // onSwiper={(swiper) => console.log(swiper)}
      

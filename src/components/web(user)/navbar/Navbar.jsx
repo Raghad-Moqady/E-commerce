@@ -27,7 +27,7 @@ export default function Navbar() {
       
       <div className="container">
       <a className="navbar-brand" href="#" style={{paddingTop: 0}}>
-        <p className='m-0'>Raghad Store</p>
+        <p className='m-0 text-white fst-italic'>Raghad Store</p>
      {/* <img src='C:\Users\HP\Desktop\fullStack\FrontEnd\React\all\ecommerce\src\components\img/logo.png'></img>*/}
       </a>
       
@@ -38,19 +38,19 @@ export default function Navbar() {
         <ul className="navbar-nav m-auto">
          
           <li className="nav-item ">
-            <Link className="nav-link" to="/">Home</Link>
+            <Link className="nav-link text-white fw-bold" to="/">Home</Link>
           </li>
  
           <li className="nav-item">
-            <Link className="nav-link" to="/categories">Categories</Link>
+            <Link className="nav-link text-white fw-bold" to="/categories">Categories</Link>
           </li>
 
 
           <li className="nav-item">
-          <Link className="nav-link" to="/products">Products</Link>
+          <Link className="nav-link text-white fw-bold" to="/products">Products</Link>
         </li>
         {userToken? <li className="nav-item">
-          <Link className="nav-link" to="/cart">Cart <label className='bg-success-subtle px-2'>{productCount}</label> </Link>
+          <Link className="nav-link text-white fw-bold " to="/cart">Cart <label className=' px-2' style={{backgroundColor:'var(--main-color)'}}>{productCount}</label> </Link>
         </li>:null}
         
         </ul>
@@ -58,9 +58,12 @@ export default function Navbar() {
         <li className="nav-item dropdown">
         <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
          {userData!=null?
-         <img src= {userData.image.secure_url} alt="userImage" style={{width:'2rem', height: '2rem', borderRadius: '50%', marginRight: '5%'}} />
+         <img src= {userData?.image.secure_url} alt="userImage" style={{width:'2rem', height: '2rem', borderRadius: '50%', marginRight: '5%'}} />
           :''}
-          {userData!=null?userData.userName:'Welcome'}
+          <span className='text-white fw-bold'>
+            
+          {userData!=null?userData?.userName:'Welcome'}
+          </span>
         </a>
         <ul className="dropdown-menu ">
           {userToken==null?

@@ -10,6 +10,7 @@ import { CreateorderSchema } from '../../authentication/validation/validate.js';
 import Input from '../../authentication/Input.jsx';
 import { SuccessToast } from '../../pages/toast/toast.js';
 import { CircularProgress } from '@mui/material';
+import Title from '../../pages/title/Title.jsx';
 
 export default function CreateOrder() {
  
@@ -95,22 +96,22 @@ const renderInputs=inputs.map((input ,index)=>
 
   return (
     <div className='container'>
-      <h1 className='text-center mt-4'>Create Order</h1>
-      {productCount!=0?
+      <Title title="Create Order"/>
+       {productCount!=0?
       <>
        <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
         {renderInputs} 
       </div>
       <div className="text-center"> 
-       <button type="submit" className="btn bg-success-subtle w-50 rounded-5 " hover  disabled={!formik.isValid}>
+       <button type="submit" className="btn bg-success-subtle w-50 rounded-5 "  disabled={!formik.isValid}>
          {loading?<CircularProgress color="inherit" size={20} />:
         "Submit"
       }
         </button>
        </div>
       </form>
-      <h2 className='text-center mt-4'>Your Cart</h2>
+      <Title title="Your Cart"/>
   <table className="table mt-3 ">
   <thead>
     <tr className='text-center'> 

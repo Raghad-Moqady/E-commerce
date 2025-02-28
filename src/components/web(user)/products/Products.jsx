@@ -4,11 +4,14 @@ import axios from 'axios';
 import Loading from '../../pages/loader/Loading';
 import style from './Products.module.css';
 import { Link } from 'react-router-dom';
-import { Alert, Rating } from '@mui/material';
-
+import { Alert } from '@mui/material';
+import Title from '../../pages/title/Title';
+ 
 export default function Products() {
   const [data,setData]=useState(null);
   const [loading,setLoding]=useState(false); 
+ 
+
   const getAllProducts=async(page=1,limit=5)=>{
     setLoding(true);
     //&search=""
@@ -33,6 +36,11 @@ export default function Products() {
   return (
    <>
    <Categories/>
+   {/* title */}
+   <div className="container">
+    <Title title="Products"/> 
+   </div> 
+{/* Get Products */}
    {loading? <Loading/>:<div className='container mt-5'>
     <div className="row  row-gap-5">
     {data?.products.length?data?.products.map((product)=>

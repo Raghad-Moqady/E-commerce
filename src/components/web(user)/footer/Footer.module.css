@@ -1,0 +1,11 @@
+
+.footer{
+    background-color:var(--secondary-color);
+    position: absolute;
+    bottom: fixed;
+     width: 100%;
+}
+.content{
+    font-size: large;
+    font-weight: bold;
+}
