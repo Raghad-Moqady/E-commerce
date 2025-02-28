@@ -11,7 +11,7 @@ import 'swiper/css/scrollbar';
 import { Link } from 'react-router-dom';
 import Loading from '../../pages/loader/Loading';
 import Alert from '../../pages/alert/Alert';
-import style from './categories.module.css'
+import style from './Categories.module.css'
 import Title from '../../pages/title/Title';
 
 export default function Categories() {
