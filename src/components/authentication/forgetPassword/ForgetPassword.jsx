@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { SuccessToast } from '../../pages/toast/toast.js';
 import { forgetPasswordSchema } from '../validation/validate.js';
-import forgetPassword from '../../img/ForgetPassword.jpg';
+import forgetPassword from '../../img/forgetPassword.jpg';
 import SharedForm from '../sharedForm/SharedForm.jsx';
 
 export default function ForgetPassword() {
